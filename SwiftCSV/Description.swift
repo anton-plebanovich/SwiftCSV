@@ -11,7 +11,7 @@ import Foundation
 extension CSV: CustomStringConvertible {
     public var description: String {
         let head = header.joined(separator: ",") + "\n"
-        let cont = namedRows.map { row in
+        let cont = try? getNamedRows().map { row in
             return header.map { key -> String in
                 let value = row[key]!
                 
@@ -24,7 +24,8 @@ extension CSV: CustomStringConvertible {
             }.joined(separator: ",")
             
         }.joined(separator: "\n")
-        return head + cont
+        
+        return head + (cont ?? "")
     }
 }
 

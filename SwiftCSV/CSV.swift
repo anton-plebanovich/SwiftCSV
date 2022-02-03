@@ -23,31 +23,10 @@ open class CSV {
     
     public let header: [String]
 
-    lazy var _namedView: NamedView = {
-        return try! NamedView(
-            header: self.header,
-            text: self.text,
-            delimiter: self.delimiter,
-            loadColumns: self.loadColumns)
-    }()
-
-    lazy var _enumeratedView: EnumeratedView = {
-        return try! EnumeratedView(
-            header: self.header,
-            text: self.text,
-            delimiter: self.delimiter,
-            loadColumns: self.loadColumns)
-    }()
-
     var text: String
     var delimiter: Character
 
     let loadColumns: Bool
-
-    /// List of dictionaries that contains the CSV data
-    public var namedRows: [[String : String]] {
-        return _namedView.rows
-    }
     
     public func getNamedRows() throws -> [[String : String]] {
         let namedView = try NamedView(
@@ -57,12 +36,6 @@ open class CSV {
             loadColumns: self.loadColumns)
         
         return namedView.rows
-    }
-
-    /// Dictionary of header name to list of values in that column
-    /// Will not be loaded if loadColumns in init is false
-    public var namedColumns: [String : [String]] {
-        return _namedView.columns
     }
     
     public func getNamedColumns() throws -> [String : [String]] {
@@ -75,29 +48,6 @@ open class CSV {
         return namedView.columns
     }
 
-    /// Collection of column fields that contain the CSV data
-    public var enumeratedRows: [[String]] {
-        return _enumeratedView.rows
-    }
-
-    /// Collection of columns with metadata.
-    /// Will not be loaded if loadColumns in init is false
-    public var enumeratedColumns: [EnumeratedView.Column] {
-        return _enumeratedView.columns
-    }
-
-
-    @available(*, unavailable, renamed: "namedRows")
-    public var rows: [[String : String]] {
-        return namedRows
-    }
-
-    @available(*, unavailable, renamed: "namedColumns")
-    public var columns: [String : [String]] {
-        return namedColumns
-    }
-
-    
     /// Load CSV data from a string.
     ///
     /// - parameter string: CSV contents to parse.
