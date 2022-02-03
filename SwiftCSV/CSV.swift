@@ -48,11 +48,31 @@ open class CSV {
     public var namedRows: [[String : String]] {
         return _namedView.rows
     }
+    
+    public func getNamedRows() throws -> [[String : String]] {
+        let namedView = try NamedView(
+            header: self.header,
+            text: self.text,
+            delimiter: self.delimiter,
+            loadColumns: self.loadColumns)
+        
+        return namedView.rows
+    }
 
     /// Dictionary of header name to list of values in that column
     /// Will not be loaded if loadColumns in init is false
     public var namedColumns: [String : [String]] {
         return _namedView.columns
+    }
+    
+    public func getNamedColumns() throws -> [String : [String]] {
+        let namedView = try NamedView(
+            header: self.header,
+            text: self.text,
+            delimiter: self.delimiter,
+            loadColumns: self.loadColumns)
+        
+        return namedView.columns
     }
 
     /// Collection of column fields that contain the CSV data
